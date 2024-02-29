@@ -1,9 +1,14 @@
 from django.views.generic import TemplateView
+from config import Config
 
 
-class HomePageView(TemplateView):
-    template_name = "home.html"
+class AuthPage(TemplateView):
+    template_name = "auth.html"
 
 
-class AboutView(TemplateView):
-    template_name = "about.html"
+class BlogView(TemplateView):
+    @property
+    def template_name(self) -> str:
+        if Config().authorized:
+            return "blog.html"
+        return "404.html"

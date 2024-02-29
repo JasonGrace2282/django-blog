@@ -1,10 +1,8 @@
 from django.urls import path
 
-from .views import HomePageView, AboutView
+from .views import AuthPage, BlogView
 
 urlpatterns = [
-    # "" means url/
-    # if it was "hi" it would be url/hi
-    path("", HomePageView.as_view(), name="home"),
-    path("about", AboutView.as_view(), name="about")
+    path("", AuthPage.as_view(), name="auth"),
+    path("blog", BlogView.as_view(), name="blog")
 ]
