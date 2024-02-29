@@ -1,8 +1,8 @@
 from django.urls import path
 
-from .views import AuthPage, BlogView
+from .views import LoggedIn, make_auth
 
 urlpatterns = [
-    path("", AuthPage.as_view(), name="auth"),
-    path("blog", BlogView.as_view(), name="blog")
+    path("", make_auth, name="auth"),
+    path("loggedin", LoggedIn.as_view(), name="loggedin")
 ]
