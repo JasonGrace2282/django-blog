@@ -1,5 +1,5 @@
-from config import RenderIfLoggedIn
+from django.views.generic import TemplateView
 
 
-class BlogView(RenderIfLoggedIn):
-    main = 'blog.html'
+class BlogView(TemplateView):
+    template_name = "blog.html"
