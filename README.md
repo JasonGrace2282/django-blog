@@ -12,3 +12,4 @@ git clone https://github.com/JasonGrace2282/django-blog.git && cd django-blog
 ```
 
 Note that you will need to get your own `CLIENT_ID` and `CLIENT_SECRET` from Ion.
+It should redirect to `http://localhost:8000/login/token-code`
