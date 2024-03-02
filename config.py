@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from requests_oauthlib import OAuth2Session
+from secrets import CLIENT_ID,  CLIENT_SECRET
 
 __all__ = ["BlogConfig"]
 
@@ -16,21 +18,21 @@ class Singleton(type):
         return cls._instances[cls]
 
 
+authorize_url = "https://ion.tjhsst.edu/oauth/authorize/"
+token_url = "https://ion.tjhsst.edu/oauth/token/"
+
+
 class _BlogConfig(metaclass=Singleton):
-    admin_data: AdminProfile | None = None
+    ion_oauthed = False
+    oauth = OAuth2Session(
+        CLIENT_ID,
+        redirect_uri='http://localhost:8000/login/token-code',
+        auto_refresh_url=token_url,
+        auto_refresh_kwargs={
+            'client_id': CLIENT_ID,
+            'client_secret': CLIENT_SECRET
+        }
+    )
 
 
 BlogConfig = _BlogConfig()
-
-
-class AdminProfile:
-    def __init__(self, profile):
-        # very primitive system
-        for k, v in profile.items():
-            setattr(self, k, v)
-
-    def __getitem__(self, item):
-        return getattr(self, item)
-
-    def __bool__(self) -> bool:
-        return True

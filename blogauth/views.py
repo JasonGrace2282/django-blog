@@ -1,7 +1,6 @@
-from django.shortcuts import HttpResponseRedirect, redirect, render
-from secrets import CLIENT_ID, CLIENT_SECRET
-from requests_oauthlib import OAuth2Session
-from config import BlogConfig, AdminProfile
+from django.shortcuts import redirect, render
+from config import BlogConfig, authorize_url, CLIENT_ID
+from django.http.response import HttpResponseRedirect
 
 
 def add_to_base_url(url, **kwargs):
@@ -14,19 +13,18 @@ def add_to_base_url(url, **kwargs):
     return url.rstrip("&")
 
 
-def login_with_ion(request):
-    if BlogConfig.admin_data is not None:
-        return authorized_page(request)
-    kwargs = {
-        "client_id": CLIENT_ID,
-        "response_type": "code"
+def ion_getcode_auth(request):
+    if BlogConfig.ion_oauthed:
+        return redirect('/admin/')
+
+    auth_kwargs = {
+        'client_id': CLIENT_ID,
+        'response_type': 'code'
     }
-    url = "https://ion.tjhsst.edu/oauth/authorize/"
-
-    return redirect(add_to_base_url(url, **kwargs))
+    return redirect(add_to_base_url(authorize_url, **auth_kwargs))
 
 
-def auth_code(request):
+def code_to_token(request):
     code = request.GET.get("code", None)
     if code is None:
         return render(
@@ -34,24 +32,5 @@ def auth_code(request):
             'failed.html',
             {"description": "Did you prevent Ion access?"}
         )
-    url = "https://ion.tjhsst.edu/oauth/token/"
-    kwargs = {
-        'code': code,
-        'client_secret': CLIENT_SECRET
-    }
-    oauth = OAuth2Session(
-        CLIENT_ID,
-        auto_refresh_url=url,
-        auto_refresh_kwargs={
-            "client_id": CLIENT_ID,
-            'client_secret': CLIENT_SECRET
-        }
-    )
-    oauth.fetch_token(url, **kwargs)
-    profile = oauth.get("https://ion.tjhsst.edu/api/profile")
-    BlogConfig.admin_data = AdminProfile(profile.json())
-    return HttpResponseRedirect('/admin/authorized')
-
-
-def authorized_page(request):
-    return render(request, 'logged_in.html')
+    BlogConfig.ion_oauthed = True
+    return HttpResponseRedirect('/admin/')
