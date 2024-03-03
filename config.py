@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from requests_oauthlib import OAuth2Session
-from secrets import CLIENT_ID,  CLIENT_SECRET
+from secret import CLIENT_ID,  CLIENT_SECRET
 
 __all__ = ["BlogConfig"]
 
