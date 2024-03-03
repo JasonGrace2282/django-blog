@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from requests_oauthlib import OAuth2Session
-from secret import CLIENT_ID,  CLIENT_SECRET
+import os
 
 __all__ = ["BlogConfig"]
 
@@ -20,6 +20,9 @@ class Singleton(type):
 
 authorize_url = "https://ion.tjhsst.edu/oauth/authorize/"
 token_url = "https://ion.tjhsst.edu/oauth/token/"
+
+CLIENT_ID = os.environ["BLOG_ION_CLIENT_ID"]
+CLIENT_SECRET = os.environ["BLOG_ION_CLIENT_SECRET"]
 
 
 class _BlogConfig(metaclass=Singleton):
