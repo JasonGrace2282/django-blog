@@ -4,12 +4,11 @@ from django.contrib.auth.models import User
 
 
 class IonOAuth(BaseBackend):
-    def authenticate(self, request, username=None, password=None, **kwargs):
-        user = IonUser.objects.get(pk=request.session["pk"])  # type: ignore
+    def authenticate(self, request, username=None, password=None, *args, **kwargs) -> User | None:
         if (
             username == "admin"
             and password == "testpass123"
-            and user.is_oauthed
+            and request.session.get("pk", False)
         ):
             return get_user_by_username(username)
         return None
