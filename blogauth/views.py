@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse
 from requests_oauthlib import OAuth2Session
-from .models import BlogConfig
+from .models import IonUser
 import os
 import json
 
@@ -63,7 +63,7 @@ def code_to_token(request):
     profile = json.loads(
         oauth.get(profile_url).content.decode(encoding='utf-8')
     )
-    blog_config = BlogConfig(  # type: ignore
+    blog_config = IonUser(  # type: ignore
         ion_username=profile['ion_username']
     )
     blog_config.save()

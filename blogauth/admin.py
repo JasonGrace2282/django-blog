@@ -1,11 +1,11 @@
-from blogauth.models import BlogConfig
+from blogauth.models import IonUser
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.models import User
 
 
 class IonOAuth(BaseBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
-        user = BlogConfig.objects.get(pk=request.session["pk"])  # type: ignore
+        user = IonUser.objects.get(pk=request.session["pk"])  # type: ignore
         if (
             username == "admin"
             and password == "testpass123"

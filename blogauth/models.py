@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class BlogConfig(models.Model):
+class IonUser(models.Model):
     ion_username = models.TextField()
 
     def __str__(self) -> str:

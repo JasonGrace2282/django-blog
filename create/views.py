@@ -1,6 +1,6 @@
 from django.views.generic import FormView
 from django.urls import reverse_lazy
-from blogauth.models import BlogConfig
+from blogauth.models import IonUser
 from posts.models import Post
 from .models import PostForm
 
@@ -15,7 +15,7 @@ class CreatePost(FormView):
         if self.request.session.get('pk', None) is None:
             print("id not set")
             return context
-        context['username'] = BlogConfig.objects.get(  # type: ignore
+        context['username'] = IonUser.objects.get(  # type: ignore
             id=self.request.session['pk']
         ).ion_username
 
