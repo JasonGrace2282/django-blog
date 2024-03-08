@@ -2,11 +2,13 @@
 
 {% block content %}
 <body>
-  Welcome {{username|default:""}}!
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Create Post">
-  </form>
+  {% if username|default:"" != "" %}
+    Welcome {{username|default:""}}!
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Create Post">
+    </form>
+  {% endif %}
 </body>
 {% endblock content %}

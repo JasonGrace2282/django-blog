@@ -13,7 +13,6 @@ class CreatePost(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.session.get('pk', None) is None:
-            print("id not set")
             return context
         context['username'] = IonUser.objects.get(  # type: ignore
             id=self.request.session['pk']
