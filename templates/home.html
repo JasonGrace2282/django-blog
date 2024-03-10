@@ -4,7 +4,7 @@
 <h1>Message board homepage</h1>
 <ul>
   {% for post in post_list %}
-  <li>{{ post.title }}<br>{{ post.body }}</li>
+  <li>{{ post.title }} @ {{ post.date }}<br>{{ post.body }}</li>
   {% endfor %}
 </ul>
 {% endblock content %}
