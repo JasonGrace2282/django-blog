@@ -1,0 +1,14 @@
+services:
+  application:
+    build: .
+    ports:
+      - "8000:5000"
+    entrypoint:
+      [
+        "sleep",
+        "infinity"
+      ]
+    volumes:
+      - .:/code
+    environment:
+      FLASK_DEBUG: "true"
