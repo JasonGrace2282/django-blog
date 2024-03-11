@@ -1,14 +1,49 @@
+version: '3.9'
+
 services:
+  redis:
+    container_name: server
+    image: redis:latest
+    expose:
+      - "6379"
+
   application:
-    build: .
+    container_name: understudy_blog
+    image: blogimg
     ports:
-      - "8000:5000"
+      - 8000:8000
+    build: .
+    volumes:
+      - .:/sysblog
+    depends_on:
+      - redis
+
+  celery:
+    container_name: celery
+    image: application
+    depends_on:
+      - application
+    volumes:
+      - .:/sysblog
+
+  celerybeat:
+    container_name: celerybeat
+    image: application
     entrypoint:
       [
-        "sleep",
-        "infinity"
+        "/bin/sh",
+        "-c",
+        "git config --global --add safe.directory /sysblog && \
+         cd /sysblog && \
+         rm -rf __pycache__ && \
+         celery -A blog beat -l info"
       ]
+    depends_on:
+      - application
     volumes:
-      - .:/code
+      - .:/sysblog
+    ports:
+      - 6379:6379
     environment:
-      FLASK_DEBUG: "true"
+      - BLOG_ION_CLIENT_ID=FLXrEN2f8asP8yHJeY3UmYzJbVrRbunGhKCQgtE4
+      - BLOG_ION_CLIENT_SECRET=1iYkwqeXQ2wNdv28Rm3QopQVV7egmOuykAcV4Ql0J1Xe2qWDCn9r1d96mbe0LA7cAwG3QPb48ls5iwwjEZ0oAzPLA8lh2gpMaU3LJMnU8fTYSVqbXc41aZTp61ycdJBk
