@@ -4,8 +4,10 @@ services:
   redis:
     container_name: server
     image: redis:latest
+    restart: always
+    command: redis-server
     expose:
-      - "6379"
+      - 6379:6379
 
   application:
     container_name: understudy_blog
@@ -20,7 +22,7 @@ services:
 
   celery:
     container_name: celery
-    image: application
+    image: blogimg
     depends_on:
       - application
     volumes:
@@ -28,7 +30,7 @@ services:
 
   celerybeat:
     container_name: celerybeat
-    image: application
+    image: blogimg
     entrypoint:
       [
         "/bin/sh",
@@ -36,14 +38,9 @@ services:
         "git config --global --add safe.directory /sysblog && \
          cd /sysblog && \
          rm -rf __pycache__ && \
-         celery -A blog beat -l info"
+         python3 -m celery -A blog worker -l info"
       ]
     depends_on:
       - application
     volumes:
       - .:/sysblog
-    ports:
-      - 6379:6379
-    environment:
-      - BLOG_ION_CLIENT_ID=FLXrEN2f8asP8yHJeY3UmYzJbVrRbunGhKCQgtE4
-      - BLOG_ION_CLIENT_SECRET=1iYkwqeXQ2wNdv28Rm3QopQVV7egmOuykAcV4Ql0J1Xe2qWDCn9r1d96mbe0LA7cAwG3QPb48ls5iwwjEZ0oAzPLA8lh2gpMaU3LJMnU8fTYSVqbXc41aZTp61ycdJBk
