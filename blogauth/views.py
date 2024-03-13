@@ -3,12 +3,14 @@ from django.http.response import HttpResponseRedirect
 from django.urls import reverse
 from requests_oauthlib import OAuth2Session
 from .models import IonUser
-import os
 import json
 
 
-CLIENT_ID = os.environ["BLOG_ION_CLIENT_ID"]
-CLIENT_SECRET = os.environ["BLOG_ION_CLIENT_SECRET"]
+with open('secret.json') as f:
+    data = json.load(f)
+
+CLIENT_ID = data["BLOG_ION_CLIENT_ID"]
+CLIENT_SECRET = data["BLOG_ION_CLIENT_SECRET"]
 
 authorize_url = "https://ion.tjhsst.edu/oauth/authorize/"
 token_url = "https://ion.tjhsst.edu/oauth/token/"
