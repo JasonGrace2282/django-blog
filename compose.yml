@@ -57,3 +57,7 @@ services:
       - application
     volumes:
       - .:/sysblog
+
+networks:
+  understudy_blog:
+    driver: bridge
